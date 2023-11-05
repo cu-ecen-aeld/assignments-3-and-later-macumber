@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Script for finding text in files
 # Author: Dan Macumber
 
