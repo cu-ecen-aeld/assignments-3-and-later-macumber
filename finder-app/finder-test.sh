@@ -9,10 +9,20 @@ set -u
 #make clean
 #make
 
+
 NUMFILES=10
+SCRIPT_DIR=$(dirname $0)
 WRITESTR=AELD_IS_FUN
 WRITEDIR=/tmp/aeld-data
-username=$(cat ../conf/username.txt)
+
+if [ -d /etc/finder-app/conf ]
+then
+	CONF_DIR=/etc/finder-app/conf
+else
+	CONF_DIR=$SCRIPT_DIR/../conf/
+fi
+
+username=$(cat $CONF_DIR/username.txt)
 
 if [ $# -lt 3 ]
 then
@@ -36,7 +46,7 @@ echo "Writing ${NUMFILES} files containing string ${WRITESTR} to ${WRITEDIR}"
 rm -rf "${WRITEDIR}"
 
 # create $WRITEDIR if not assignment1
-assignment=`cat ../conf/assignment.txt`
+assignment=`cat $CONF_DIR/assignment.txt`
 
 if [ $assignment != 'assignment1' ]
 then
@@ -58,10 +68,10 @@ fi
 
 for i in $( seq 1 $NUMFILES)
 do
-	./writer "$WRITEDIR/${username}$i.txt" "$WRITESTR"
+	$SCRIPT_DIR/writer "$WRITEDIR/${username}$i.txt" "$WRITESTR"
 done
 
-OUTPUTSTRING=$(./finder.sh "$WRITEDIR" "$WRITESTR")
+OUTPUTSTRING=$($SCRIPT_DIR/finder.sh "$WRITEDIR" "$WRITESTR")
 
 # remove temporary directories
 rm -rf /tmp/aeld-data
