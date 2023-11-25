@@ -1,0 +1,58 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          aesdsocket
+# Short-Description: Socket server running on port 9000
+# Description:       Socket server running on port 9000 for aesd assignment 5 part 2
+### END INIT INFO
+
+set -e
+
+#DAEMON=/usr/bin/aesdsocket
+DAEMON=/home/macumber/School/assignment-3-macumber/server/aesdsocket
+NAME=aesdsocket
+DESC="aesdsocket server"
+
+# exit if daemon is not executable
+test -x $DAEMON || exit 0
+
+# source helper functions
+. /lib/lsb/init-functions
+
+start_it_up()
+{
+  log_daemon_msg "Starting $DESC" "$NAME"
+  start-stop-daemon --start --verbose --name $NAME --exec $DAEMON -- -d
+  log_end_msg $?
+}
+
+shut_it_down()
+{
+  log_daemon_msg "Stopping $DESC" "$NAME"
+  start-stop-daemon --stop --verbose --oknodo --name $NAME
+  log_end_msg $?
+  rm -f $PIDFILE
+}
+
+case "$1" in
+  start)
+    start_it_up
+  ;;
+  stop)
+    shut_it_down
+  ;;
+  reload|force-reload)
+    shut_it_down
+    start_it_up
+  ;;
+  restart)
+    shut_it_down
+    start_it_up
+  ;;
+  status)
+    status_of_proc $DAEMON $NAME && exit 0 || exit $?
+    ;;
+  *)
+    echo "Usage: /etc/init.d/$NAME {start|stop|reload|restart|force-reload|status}" >&2
+    exit 2
+  ;;
+esac
