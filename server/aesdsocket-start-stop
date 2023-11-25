@@ -7,8 +7,7 @@
 
 set -e
 
-#DAEMON=/usr/bin/aesdsocket
-DAEMON=/home/macumber/School/assignment-3-macumber/server/aesdsocket
+DAEMON=/usr/bin/aesdsocket
 NAME=aesdsocket
 DESC="aesdsocket server"
 
